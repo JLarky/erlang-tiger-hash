@@ -1,5 +1,4 @@
 -module(tiger).
--export([start/0, stop/0, init/1]).
 -export([hash/1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -20,24 +19,49 @@
 %%% along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %%%
 
+-behaviour(application).
 
-start() ->
+%% Application and Supervisor callbacks
+-export([start/0,start/2, stop/1, init/1]).
+
+%%----------------------------------------------------------------------
+%% Application behaviour callbacks
+%%----------------------------------------------------------------------
+start(_Type, _Args) ->
+
     SharedLib="tiger_drv",
-    case erl_ddll:load_driver(".", SharedLib) of
-        ok ->
-	    ok;
-	{error, already_loaded} -> ok;
-        _ -> exit({error, could_not_load_driver})
-    end,
-    spawn(?MODULE, init, [SharedLib]).
+
+    Loaded=
+	lists:any(fun(Cur_path) ->
+			  case erl_ddll:load_driver(Cur_path, SharedLib) of
+			      ok ->
+				  true;
+			      {error, already_loaded} ->
+				  true;
+			      _ ->
+				  false
+			  end
+		  end, ["priv", "../priv"]),
+    case Loaded of
+	true ->
+	    supervisor:start_link({local, ?MODULE}, ?MODULE, SharedLib);
+	false ->
+	    exit({error, could_not_load_driver})
+    end.
+
+    %%spawn(?MODULE, init, [SharedLib]).
+
 
 init(SharedLib) ->
-    register(tiger, self()),
+    %register(tiger, self()),
     Port = open_port({spawn, SharedLib}, []),
     loop(Port).
 
-stop() ->
+stop(_S) ->
     tiger ! stop.
+
+start() ->
+    start("", "").
 
 hash(X) when is_list(X) ->
     case lists:flatten(X) == X of

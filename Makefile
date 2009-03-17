@@ -1,14 +1,19 @@
-#On all machines with gcc (including Alpha)
-CC = gcc -O3
-#On 32-bit machines
-#CC = cc -O4
-#On Alpha:
-#CC = cc -O -migrate
+all: ebin ebin/tiger.beam ebin/tiger.app tiger
 
-all : tiger_drv
+ebin:
+	mkdir -p ebin
 
+ebin/%.beam: src/%.erl
+	erlc -o ebin $<
 
-#tiger_drv: tiger.dll
-tiger_drv: tiger_drv.c tiger.c
-	$(CC) -o tiger_drv.so -fpic -shared tiger_drv.c tiger.c
+tiger: priv/tiger_drv.so
 
+priv/tiger_drv.so: priv/*.c
+	(cd priv; make;)
+
+ebin/tiger.app: src/tiger.app
+	cp src/tiger.app ebin/tiger.app
+
+clean:
+	rm -rf ebin/
+	(cd priv; make clean;)
