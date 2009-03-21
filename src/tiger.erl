@@ -24,6 +24,8 @@
 %% Application and Supervisor callbacks
 -export([start/0,start/2, stop/1, init/1]).
 
+-export([loop/1]).
+
 %%----------------------------------------------------------------------
 %% Application behaviour callbacks
 %%----------------------------------------------------------------------
@@ -53,9 +55,11 @@ start(_Type, _Args) ->
 
 
 init(SharedLib) ->
-    %register(tiger, self()),
     Port = open_port({spawn, SharedLib}, []),
-    loop(Port).
+    {ok, {{one_for_one, 1, 60},
+          [{tiger, {?MODULE, loop, [Port]},
+            permanent, brutal_kill, worker, [?MODULE]}]}}.
+
 
 stop(_S) ->
     tiger ! stop.
