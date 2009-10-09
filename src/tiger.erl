@@ -30,7 +30,6 @@
 %% Application behaviour callbacks
 %%----------------------------------------------------------------------
 start(_Type, _Args) ->
-
     SharedLib="tiger_drv",
 
     Loaded=
@@ -43,22 +42,19 @@ start(_Type, _Args) ->
 			      _ ->
 				  false
 			  end
-		  end, ["priv", "../priv"]),
+		  end, ["priv", "../priv"]++filelib:wildcard("lib/tiger-*/priv")),
     case Loaded of
 	true ->
-	    supervisor:start_link({local, ?MODULE}, ?MODULE, SharedLib);
+	    {ok,spawn(fun() -> supervisor:start_link({local, ?MODULE}, ?MODULE, SharedLib)end)};
 	false ->
 	    exit({error, could_not_load_driver})
     end.
-
-    %%spawn(?MODULE, init, [SharedLib]).
-
 
 init(SharedLib) ->
     Port = open_port({spawn, SharedLib}, []),
     {ok, {{one_for_one, 1, 60},
           [{tiger, {?MODULE, loop, [Port]},
-            permanent, brutal_kill, worker, [?MODULE]}]}}.
+            transient, brutal_kill, worker, [?MODULE]}]}}.
 
 
 stop(_S) ->
