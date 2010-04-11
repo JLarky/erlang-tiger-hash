@@ -4,7 +4,7 @@ ebin:
 	mkdir ebin || echo hate Windows
 
 ebin/%.beam: src/%.erl
-	erlc -o ebin $<
+	erlc +debug_info -o ebin $<
 
 tiger-win: priv/tiger_drv.dll
 
