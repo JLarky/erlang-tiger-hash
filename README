@@ -1,9 +1,10 @@
-Tiger Hash is now working as erlang application, so do
+Tiger Hash is now working as erlang application and compiles by rebar :)
 
- $ make
- $ make tiger # Linux, Mac OS and so on
- $ make tiger-win # Windows-only
+Compile
+ $ ./rebar compile
 
+Run
+ $ cd ebin
  $ erl -pa ebin -boot start_sasl
  Eshell V5.7.2  (abort with ^G)
  1> application:start(tiger). %% or tiger:start()
@@ -17,15 +18,8 @@ Tiger Hash is now working as erlang application, so do
 hash(String) take string parameter and return Tiger Hash in 24-bytes string
 
 
-
-Troubleshooting:
-
-If you've got "error: erl_driver.h: No such file or directory" than find this file somewhere like /usr/local/lib/erlang/usr/include/erl_driver.h or C:\Program Files\erl\usr\include and just copy to priv directory where files tiger.c and tiger_drv.c are located.
-
-
 Requirements:
 * erlang-otp
-* gcc (MinGW)
-* make
+* gcc
 
-(c) 2009, JLarky <jlarky@gmail.com>
+(c) 2009,2010 JLarky <jlarky@gmail.com>

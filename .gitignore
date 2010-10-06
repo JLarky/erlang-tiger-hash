@@ -1,4 +1,7 @@
 *~
-*.beam
-*.so
-*.dll
+ebin/*.beam
+priv/*.so
+priv/*.dll
+c_src/*.o
+.eunit
+ebin/*.app
