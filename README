@@ -3,6 +3,9 @@ Tiger Hash is now working as erlang application and compiles by rebar :)
 Compile
  $ ./rebar compile
 
+Compile on Windows
+ http://github.com/JLarky/erlang-tiger-hash/wiki/compiling-on-windows
+
 Run
  $ cd ebin
  $ erl -pa ebin -boot start_sasl
