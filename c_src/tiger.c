@@ -1,6 +1,6 @@
 /*
  * tiger_drv - A Erlang Port_driver to use TIGER hash in Erlang
- * Copyrught (c) 2009, JLarky <jlarky@gmail.com>
+ * Copyright (c) 2009, JLarky <jlarky@gmail.com>
  * 
  * Originaly from :
  * uhub - A tiny ADC p2p connection hub

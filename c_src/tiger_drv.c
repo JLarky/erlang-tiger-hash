@@ -1,6 +1,6 @@
 /*
  * tiger_drv - A Erlang Port_driver to use TIGER hash in Erlang
- * Copyrught (c) 2009, JLarky <jlarky@gmail.com>
+ * Copyright (c) 2009, JLarky <jlarky@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
